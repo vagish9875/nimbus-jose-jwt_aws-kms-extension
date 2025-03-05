@@ -19,6 +19,8 @@ package com.nimbusds.jose.aws.kms.scripts;
 import static com.nimbusds.jose.aws.kms.scripts.ScriptConstants.LINE_SEPARATOR;
 import static java.lang.System.out;
 
+import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
+import com.amazonaws.regions.Regions;
 import com.amazonaws.services.kms.AWSKMSClientBuilder;
 import com.nimbusds.jose.EncryptionMethod;
 import com.nimbusds.jose.JWEAlgorithm;
@@ -118,7 +120,8 @@ public class KmsDefaultJweCompactEncrypterScript {
     private JWEObject encrypt(
             final JWEAlgorithm alg, final EncryptionMethod enc, final String kid, final String payload)
             throws Exception {
-        var jweEncrypter = new KmsDefaultEncrypter(AWSKMSClientBuilder.defaultClient(), kid);
+        var jweEncrypter = new KmsDefaultEncrypter(AWSKMSClientBuilder.standard().withRegion(Regions.EU_WEST_1)
+                .withCredentials(new DefaultAWSCredentialsProviderChain()).build(), kid);
         var jweObject = new JWEObject(new JWEHeader.Builder(alg, enc).keyID(kid).build(), new Payload(payload));
         jweObject.encrypt(jweEncrypter);
         return jweObject;

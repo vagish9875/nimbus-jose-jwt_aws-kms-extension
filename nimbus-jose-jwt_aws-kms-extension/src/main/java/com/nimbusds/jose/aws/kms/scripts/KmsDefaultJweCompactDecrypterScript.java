@@ -19,6 +19,8 @@ package com.nimbusds.jose.aws.kms.scripts;
 import static com.nimbusds.jose.aws.kms.scripts.ScriptConstants.LINE_SEPARATOR;
 import static java.lang.System.out;
 
+import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
+import com.amazonaws.regions.Regions;
 import com.amazonaws.services.kms.AWSKMSClientBuilder;
 import com.nimbusds.jose.JWEObject;
 import com.nimbusds.jose.aws.kms.crypto.KmsDefaultDecrypter;
@@ -82,7 +84,8 @@ public class KmsDefaultJweCompactDecrypterScript {
         var jweObject = JWEObject.parse(serializedJwe);
         var jweHeader = jweObject.getHeader();
         jweObject.decrypt(new KmsDefaultDecrypter(
-                AWSKMSClientBuilder.defaultClient(),
+                AWSKMSClientBuilder.standard().withRegion(Regions.EU_WEST_1)
+                        .withCredentials(new DefaultAWSCredentialsProviderChain()).build(),
                 jweHeader.getKeyID()));
 
         return jweObject;

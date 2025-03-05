@@ -19,6 +19,8 @@ package com.nimbusds.jose.aws.kms.scripts;
 import static com.nimbusds.jose.aws.kms.scripts.ScriptConstants.LINE_SEPARATOR;
 import static java.lang.System.out;
 
+import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
+import com.amazonaws.regions.Regions;
 import com.amazonaws.services.kms.AWSKMSClientBuilder;
 import com.nimbusds.jose.JWEHeader;
 import com.nimbusds.jose.JWEObject;
